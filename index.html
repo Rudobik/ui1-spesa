@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f7f2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Spesa UI 1">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <title>Spesa · UI 1</title>
+  <style>
+    :root{color-scheme:light;--bg:#f6f7f2;--card:#fff;--ink:#20251f;--muted:#697267;--line:#e2e7dd;--soft:#edf1e9;--accent:#3d6449;--danger:#a33a35}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) 14px calc(24px + env(safe-area-inset-bottom));}
+    main{max-width:680px;margin:0 auto}
+    header{display:flex;align-items:center;gap:12px;padding:22px 2px 18px}
+    .brand{width:48px;height:48px;border-radius:16px;background:#e2eadf;display:grid;place-items:center;font-size:25px}
+    h1{font-size:24px;margin:0 0 3px;letter-spacing:-.5px}
+    .sub{font-size:13px;color:var(--muted)}
+    .pill{margin-left:auto;border-radius:999px;background:var(--soft);padding:6px 10px;font-size:12px;color:var(--accent);white-space:nowrap}
+    .toolbar{display:flex;gap:8px;margin:0 0 14px}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .toolbtn{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px;color:var(--ink)}
+    .toolbtn.active{background:var(--accent);color:white;border-color:var(--accent)}
+    .list-card,.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;margin:10px 0;overflow:hidden}
+    .list-head{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:16px;border:0;background:transparent;color:inherit}
+    .list-icon{width:42px;height:42px;display:grid;place-items:center;background:var(--soft);border-radius:13px;font-size:22px;flex-shrink:0}
+    .head-text{flex:1;min-width:0}
+    .head-text strong{display:block;font-size:16px}
+    .count{font-size:12px;color:var(--muted);margin-top:2px}
+    .chevron{color:var(--muted);font-size:18px}
+    .list-body{border-top:1px solid var(--line);padding:10px}
+    .group-card{border:1px solid var(--line);border-radius:13px;margin:6px 0;overflow:hidden}
+    .group-head{width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:12px;border:0;background:#fbfcfa;color:inherit}
+    .group-icon{font-size:18px;width:26px;text-align:center}
+    .group-head strong{flex:1;font-size:14px}
+    .group-body{padding:8px}
+    .item{display:flex;align-items:center;gap:8px;padding:9px 5px;border-bottom:1px solid #f0f2ed;min-height:44px}
+    .item:last-of-type{border-bottom:0}
+    .item label{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+    .item input[type=checkbox]{width:19px;height:19px;accent-color:var(--accent);flex-shrink:0}
+    .item.done .item-name{text-decoration:line-through;color:#8a9188}
+    .item-name{overflow-wrap:anywhere}
+    .icon-btn{border:0;background:transparent;color:var(--muted);padding:6px 4px;font-size:16px;min-width:28px}
+    .icon-btn:disabled{opacity:.22;cursor:default}
+    .delete{color:var(--danger)}
+    .add-row{display:flex;gap:7px;margin-top:10px}
+    .add-row input{min-width:0;flex:1;border:1px solid var(--line);background:white;border-radius:11px;padding:11px 12px}
+    .add-btn{border:0;background:var(--accent);color:white;border-radius:11px;padding:0 14px;font-weight:600}
+    .empty{font-size:13px;color:var(--muted);padding:8px 4px}
+    .panel{padding:15px}
+    .panel h2{font-size:16px;margin:0 0 6px}
+    .panel p{font-size:13px;color:var(--muted);margin:0}
+    .panel-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .primary{background:var(--accent);color:white;border:0;border-radius:12px;padding:11px 14px;font-weight:600}
+    .secondary{background:white;border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+    .notice{font-size:12px;color:var(--muted);text-align:center;padding:12px 10px 4px}
+    .hidden{display:none!important}
+    .toast{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom));margin:10px auto 0;background:#263b2b;color:white;border-radius:12px;padding:11px 14px;max-width:450px;text-align:center;box-shadow:0 4px 18px #0002}
+    @media(min-width:540px){body{padding-left:22px;padding-right:22px}.list-head{padding:18px}.list-body{padding:12px}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="brand">🛒</div>
+    <div><h1>La mia spesa</h1><div class="sub">Le liste di UI 1, sempre a portata di mano</div></div>
+    <div id="status" class="pill">Salvato</div>
+  </header>
+  <div class="toolbar">
+    <button id="shoppingMode" class="toolbtn" type="button">☑ Modalità spesa</button>
+    <button id="resetChecks" class="toolbtn hidden" type="button">Azzera spunte</button>
+  </div>
+  <section id="lists" aria-label="Liste della spesa"></section>
+  <section class="panel">
+    <h2>Gestione dati</h2>
+    <p>Le modifiche vengono salvate automaticamente su questo dispositivo. Usa esporta per conservare una copia di sicurezza.</p>
+    <div class="panel-actions">
+      <button id="exportBtn" class="secondary" type="button">Esporta backup</button>
+      <button id="importBtn" class="secondary" type="button">Importa backup</button>
+      <input id="importFile" type="file" accept="application/json,.json" class="hidden">
+      <button id="resetBtn" class="secondary" type="button">Ripristina liste iniziali</button>
+    </div>
+  </section>
+  <div class="notice">Versione iniziale · salvataggio locale · nessun account necessario</div>
+  <div id="toast" class="toast hidden" role="status"></div>
+</main>
+<script src="./app.js"></script>
+</body>
+</html>
