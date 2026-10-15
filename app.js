@@ -4,7 +4,9 @@ const INITIAL = [
     {id:"fondamentali",name:"Fondamentali",icon:"☷",items:["Olio d’oliva","Sale fino","Sale grosso","Pepe","Zucchero","Miele","Aceto bianco","Aceto rosso","Dado da brodo","Farina","Pan Grattato","Bicarbonato","Pan carré","Pane","Pasta lunga","Pasta corta","Alici sott’olio","Concentrato di pomodoro","Passata o pelati","Olive","Noci / Mandorle / Pinoli","Spezie / Erbe aromatiche secche","Aglio","Cipolla o scalogno","Patate"]},
     {id:"preferiti",name:"Preferiti",icon:"⭐",items:["Ceci","Tahini","Salsa di soia","Riso da risotto","Riso da fare al vapore","Purè in busta","Tonno in scatola","Basilico fresco"]},
     {id:"snack",name:"Snack",icon:"🍪",items:["Taralli"]},
-    {id:"colazione",name:"Colazione",icon:"☕",items:["Cereali o Biscotti o Torta"]}
+    {id:"colazione",name:"Colazione",icon:"☕",items:["Cereali o Biscotti o Torta"]},
+    {id:"spezie",name:"Spezie",icon:"🌿",items:[]},
+    {id:"spiriti",name:"Spiriti",icon:"🍾",items:[]}
   ]},
   {id:"frigo",name:"Frigo",icon:"🧊",groups:[
     {id:"fondamentali",name:"Fondamentali",icon:"☷",items:["Uova","Parmigiano (Pezzo o grattuggiato)","Latte","Burro","Yogurt","Limoni scorza edibile","Zenzero","Capperi","Ketchup","Maionese","Senape"]},
@@ -26,7 +28,27 @@ let checked = new Set();
 
 function clone(x){return JSON.parse(JSON.stringify(x))}
 function load(){
-  try { const s=localStorage.getItem(STORAGE_KEY); if(s){const parsed=JSON.parse(s);if(Array.isArray(parsed))return parsed;} } catch(e){}
+  try {
+    const s=localStorage.getItem(STORAGE_KEY);
+    if(s){
+      const parsed=JSON.parse(s);
+      if(Array.isArray(parsed)){
+        // Migrazione non distruttiva: aggiunge le nuove sottocategorie di Dispensa
+        // anche agli utenti che hanno già dati salvati, senza sovrascrivere le liste.
+        const initialDispensa=INITIAL.find(x=>x.id==="dispensa");
+        const savedDispensa=parsed.find(x=>x.id==="dispensa");
+        if(savedDispensa && Array.isArray(savedDispensa.groups)){
+          for(const groupId of ["spezie","spiriti"]){
+            if(!savedDispensa.groups.some(g=>g.id===groupId)){
+              const template=initialDispensa.groups.find(g=>g.id===groupId);
+              if(template) savedDispensa.groups.push(clone(template));
+            }
+          }
+        }
+        return parsed;
+      }
+    }
+  } catch(e){}
   return clone(INITIAL);
 }
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));const s=document.getElementById("status");s.textContent="Salvato";s.style.background="#edf1e9";}
