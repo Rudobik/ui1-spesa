@@ -86,7 +86,7 @@ function render(){
    root.querySelectorAll("[data-to-shopping]").forEach(b=>b.onclick=()=>addToShopping(b.dataset.name));
  }
  document.getElementById("shoppingMode").classList.toggle("active",shoppingMode);
- document.getElementById("shoppingMode").textContent=shoppingMode?"← Modalità normale":"☑ Lista della spesa";
+ document.getElementById("shoppingMode").textContent=shoppingMode?"← Modalità normale":"🛒 Lista della spesa";
  document.getElementById("resetChecks").classList.toggle("hidden",!shoppingMode);
 }
 function itemsHtml(li,gi,items){
